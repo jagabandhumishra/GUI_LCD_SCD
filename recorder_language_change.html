@@ -21,9 +21,11 @@
 
     <audio src="music/1.wav" id="audio"></audio>
 
-    <div class="img-container">
+    <!-- <div class="img-container">
       <img src="images/1.png" alt="music-cover" id="cover" />
-    </div>
+    </div> -->
+    <div id="container" style="width:100%; height:500px;"></div>
+
     <div class="navigation">
       <!-- <div class="col s6 input-field">
 					<input value="" id="number" min="1" max="150" step="1" type="number" class="validate">
@@ -37,6 +39,7 @@
 					<i class="fa fa-backward"></i>
 				</button> -->
       <!-- <form> -->
+
       <button id="play" class="action-btn action-btn-big">
         <i class="fa fa-play">Play</i>
       </button>
@@ -47,6 +50,10 @@
         <i class="fa fa-repeat">Repeat</i>
       </button>
       <br />
+      <div class="text-align: center;">
+        <h4>Do you detect any change?</h4>
+      </div>
+      <br/>
       <button id="yes" class="action-btn" name="yes">
         <i class="fa fa-yes">Yes</i>
       </button>
@@ -248,13 +255,13 @@
     let songIndex = value;
 
     // Initially load song details info DOM
-    loadSong(songs[songIndex]);
+    loadSong(songs[songIndex - 1]);
 
     // Update song details
     function loadSong(song) {
-      title.innerText = song;
-      audio.src = `music/Language_change/${song}.wav`;
-      cover.src = `images/Language_change/${song}.png`;
+      title.innerText = song + '/' + '240';
+      audio.src = `music/language_change/${song}.wav`;
+      cover.src = `images/language_change/${song}.png`;
     }
     var startTime;
     // Play song
@@ -475,6 +482,32 @@
     });
     no.addEventListener("click", function(){
       stopButton("no");
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const chart = Highcharts.chart('container', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Fruit Consumption'
+            },
+            xAxis: {
+                categories: ['Apples', 'Bananas', 'Oranges']
+            },
+            yAxis: {
+                title: {
+                    text: 'Fruit eaten'
+                }
+            },
+            series: [{
+                name: 'Jane',
+                data: [1, 0, 4]
+            }, {
+                name: 'John',
+                data: [5, 7, 3]
+            }]
+        });
     });
 
   </script>

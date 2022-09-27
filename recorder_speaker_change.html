@@ -7,56 +7,58 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
   <link rel="stylesheet" href="style.css" />
+  <script src="./highcharts/code/highcharts.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/wavefile"></script>
 </head>
 
 <body>
+  <div id="container" style="width:100%; height:400px;"></div>
   <div class="music-container" id="music-container">
+
     <div class="music-info" id="music-info">
-      <h4 id="title"></h4>
+
       <span class="timestamp" id="timestamp">00:00 / 00:00</span>
       <div class="progress-container" id="progress-container">
         <div class="progress" id="progress"></div>
       </div>
     </div>
 
+
+
     <audio src="music/1.wav" id="audio"></audio>
 
     <div class="img-container">
       <img src="images/1.png" alt="music-cover" id="cover" />
     </div>
-    <div class="navigation">
-      <!-- <div class="col s6 input-field">
-					<input value="" id="number" min="1" max="150" step="1" type="number" class="validate">
-					<label for="number">Enter sentence no</label>
-				</div> -->
-      <!-- <button id="random" class="action-btn">
-					<i class="fa fa-random"></i>
-				</button> -->
 
-      <!-- <button id="prev" class="action-btn">
-					<i class="fa fa-backward"></i>
-				</button> -->
-      <!-- <form> -->
+    <div class="navigation">
       <button id="play" class="action-btn action-btn-big">
         <i class="fa fa-play">Play</i>
-      </button>
-      <button id="next" class="action-btn" name="number">
-        <i class="fa fa-forward">Next audio</i>
       </button>
       <button id="repeat" class="action-btn" name="repeat">
         <i class="fa fa-repeat">Repeat</i>
       </button>
-      <br />
-      <button id="yes" class="action-btn" name="yes">
-        <i class="fa fa-yes">Yes</i>
+      <button id="next" class="action-btn" name="number">
+        <i class="fa fa-forward">Next audio</i>
       </button>
 
-      <button id="no" class="action-btn" name="no">
-        <i class="fa fa-no">No</i>
-      </button>
-      <!-- </form> -->
+      <br />
+      <div>
+        <h4>Do you detect any change?</h4>
+      </div>
+      <div class="mt-3">
+        <button id="yes" class="action-btn" name="yes">
+          <i class="fa fa-yes">Yes</i>
+        </button>
+
+        <button id="no" class="action-btn" name="no">
+          <i class="fa fa-no">No</i>
+        </button>
+      </div>
     </div>
+    <h4 id="title"></h4>
   </div>
+
 
   <!-- <p hidden>
 		<details class="order-container" id="order-container"></details>
@@ -244,14 +246,14 @@
     let value = params.sentence;
 
     // Keep track of song
-    let songIndex = value--;
+    let songIndex = value;
 
     // Initially load song details info DOM
-    loadSong(songs[songIndex]);
+    loadSong(songs[songIndex - 1]);
 
     // Update song details
     function loadSong(song) {
-      title.innerText = song;
+      title.innerText = song + '/' + '150';
       audio.src = `music/Speaker_change/${song}.wav`;
       cover.src = `images/Speaker_change/${song}.png`;
     }
@@ -297,170 +299,187 @@
         startTime = null;
       }
     }
-      // Next song
-      function nextSong() {
-        songIndex++;
+    // Next song
+    function nextSong() {
+      songIndex++;
 
-        if (songIndex > songs.length - 1) {
-          songIndex = 0;
-        }
+      if (songIndex > songs.length - 1) {
+        songIndex = 0;
+      }
 
-        loadSong(songs[songIndex]);
+      loadSong(songs[songIndex]);
 
+      playSong();
+    }
+
+    // Get song duration
+    function getSongDuration() {
+      let allMins = Math.floor(audio.duration / 60);
+      if (allMins < 10) {
+        allMins = "0" + String(allMins);
+      }
+
+      let allSecs = Math.floor(audio.duration % 60);
+      if (allSecs < 10) {
+        allSecs = "0" + String(allSecs);
+      }
+
+      if (allMins && allSecs) {
+        return `${allMins}:${allSecs}`;
+      } else {
+        return "00:00";
+      }
+    }
+
+    // Update timestamp
+    function updateTimestamp() {
+      // Get minutes
+      let mins = Math.floor(audio.currentTime / 60);
+      if (mins < 10) {
+        mins = "0" + String(mins);
+      }
+
+      // Get seconds
+      let secs = Math.floor(audio.currentTime % 60);
+      if (secs < 10) {
+        secs = "0" + String(secs);
+      }
+
+      if (mins && secs) {
+        timestamp.innerHTML = `${mins}:${secs} / ${getSongDuration()}`;
+      } else {
+        timestamp.innerHTML = "00:00 / 00:00";
+      }
+    }
+
+    // Update progress bar
+    function updateProgress(e) {
+      const { duration, currentTime } = e.srcElement;
+      const progressPercent = (currentTime / duration) * 100;
+      progress.style.width = `${progressPercent}%`;
+
+      updateTimestamp();
+    }
+
+    // Set progress bar & timestamp
+    function setProgress(e) {
+      const width = this.clientWidth;
+      const clickX = e.offsetX;
+      const duration = audio.duration;
+
+      audio.currentTime = (clickX / width) * duration;
+      updateTimestamp();
+    }
+
+    // Set song on repeat
+    function repeatSong() {
+      const isPlaying = musicContainer.classList.contains("play");
+
+      if (isPlaying) {
+        pauseSong();
+      } else {
         playSong();
       }
+    }
 
-      // Get song duration
-      function getSongDuration() {
-        let allMins = Math.floor(audio.duration / 60);
-        if (allMins < 10) {
-          allMins = "0" + String(allMins);
-        }
-
-        let allSecs = Math.floor(audio.duration % 60);
-        if (allSecs < 10) {
-          allSecs = "0" + String(allSecs);
-        }
-
-        if (allMins && allSecs) {
-          return `${allMins}:${allSecs}`;
-        } else {
-          return "00:00";
-        }
+    // Set song on repeat
+    function setRandomOrder() {
+      if (random.classList.contains("active")) {
+        random.classList.remove("active");
+        songs = [...initialSongs];
+        songIndex = songs.indexOf(title.innerText);
+      } else {
+        random.classList.add("active");
+        songs = shuffle(songs);
+        songIndex = songs.indexOf(title.innerText);
       }
+    }
 
-      // Update timestamp
-      function updateTimestamp() {
-        // Get minutes
-        let mins = Math.floor(audio.currentTime / 60);
-        if (mins < 10) {
-          mins = "0" + String(mins);
-        }
-
-        // Get seconds
-        let secs = Math.floor(audio.currentTime % 60);
-        if (secs < 10) {
-          secs = "0" + String(secs);
-        }
-
-        if (mins && secs) {
-          timestamp.innerHTML = `${mins}:${secs} / ${getSongDuration()}`;
-        } else {
-          timestamp.innerHTML = "00:00 / 00:00";
-        }
+    // Shuffle songs
+    function shuffle(songs) {
+      for (let i = songs.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [songs[i], songs[j]] = [songs[j], songs[i]];
       }
+      return songs;
+    }
 
-      // Update progress bar
-      function updateProgress(e) {
-        const { duration, currentTime } = e.srcElement;
-        const progressPercent = (currentTime / duration) * 100;
-        progress.style.width = `${progressPercent}%`;
+    // Set song on click
+    function setSong(i) {
+      songIndex = i;
+      console.log("setSong -> songIndex", songIndex);
 
-        updateTimestamp();
-      }
+      loadSong(songs[songIndex]);
 
-      // Set progress bar & timestamp
-      function setProgress(e) {
-        const width = this.clientWidth;
-        const clickX = e.offsetX;
-        const duration = audio.duration;
+      playSong();
+    }
 
-        audio.currentTime = (clickX / width) * duration;
-        updateTimestamp();
-      }
+    // Event listeners
+    playBtn.addEventListener("click", () => {
+      const isPlaying = musicContainer.classList.contains("play");
 
-      // Set song on repeat
-      function repeatSong() {
-        const isPlaying = musicContainer.classList.contains("play");
-
-        if (isPlaying) {
-          pauseSong();
-        } else {
-          playSong();
-        }
-      }
-
-      // Set song on repeat
-      function setRandomOrder() {
-        if (random.classList.contains("active")) {
-          random.classList.remove("active");
-          songs = [...initialSongs];
-          songIndex = songs.indexOf(title.innerText);
-        } else {
-          random.classList.add("active");
-          songs = shuffle(songs);
-          songIndex = songs.indexOf(title.innerText);
-        }
-      }
-
-      // Shuffle songs
-      function shuffle(songs) {
-        for (let i = songs.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [songs[i], songs[j]] = [songs[j], songs[i]];
-        }
-        return songs;
-      }
-
-      // Set song on click
-      function setSong(i) {
-        songIndex = i;
-        console.log("setSong -> songIndex", songIndex);
-
-        loadSong(songs[songIndex]);
-
+      if (isPlaying) {
+        pauseSong();
+      } else {
         playSong();
       }
+    });
 
-      // Event listeners
-      playBtn.addEventListener("click", () => {
-        const isPlaying = musicContainer.classList.contains("play");
+    // Change song
 
-        if (isPlaying) {
-          pauseSong();
-        } else {
-          playSong();
-        }
+    nextBtn.addEventListener("click", nextSong);
+
+    // Time/song update
+    audio.addEventListener("timeupdate", updateProgress);
+
+    // Click on progress bar
+    progressContainer.addEventListener("click", setProgress);
+
+    // Song ends
+    audio.addEventListener("ended", pauseSong);
+
+    // Repeat song
+    repeat.addEventListener("click", repeatSong);
+
+    // Random songs order
+    // random.addEventListener('click', setRandomOrder);
+
+    yes.addEventListener("click", stopButton);
+    no.addEventListener("click", stopButton);
+
+    song = songs[songIndex - 1];
+    console.log(song);
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const chart = Highcharts.chart('container', {
+        chart: {
+          type: 'line'
+        },
+        title: {
+          text: 'Fruit Consumption'
+        },
+        xAxis: {
+          min: 0,
+          max: 3.1
+        },
+        yAxis: {
+          title: {
+            text: 'Fruit eaten'
+          }
+        },
+        series: [{
+          name: 'Jane',
+          data: [1, 0, 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        }]
       });
+    });
 
-      // Change song
 
-      nextBtn.addEventListener("click", nextSong);
 
-      // Time/song update
-      audio.addEventListener("timeupdate", updateProgress);
 
-      // Click on progress bar
-      progressContainer.addEventListener("click", setProgress);
 
-      // Song ends
-      audio.addEventListener("ended", pauseSong);
-
-      // Repeat song
-      repeat.addEventListener("click", repeatSong);
-
-      // Random songs order
-      // random.addEventListener('click', setRandomOrder);
-
-      yes.addEventListener("click", stopButton);
-      no.addEventListener("click", stopButton);
-
-    // $(document).ready(function () {
-    //   $("#yes").click(function (e) {
-    //     e.preventDefault();
-    //     $.ajax({
-    //       type: "POST",
-    //       url: "https://script.google.com/macros/s/AKfycbxdbjLtkrE7SlC1OKBvOLoj7KpfFhKpZMb7xI-vxf64ZNIYsEViZl6kTJJMkab0wgyM/exec",
-    //       data: ("#yes").val(),
-    //       success: function (result) {
-    //         alert("ok");
-    //       },
-    //       error: function (result) {
-    //         alert("error");
-    //       },
-    //     });
-    //   });
-    // });
   </script>
 </body>
 

@@ -187,6 +187,7 @@ $(document).ready(function () {
             // Prevent form submission
             e.preventDefault();
 
+            console.log(e);
             // Get the form instance
             var $form = $(e.target);
 
@@ -196,11 +197,13 @@ $(document).ready(function () {
             
             var number = document.getElementById('sentence').value
             var redirectUrl = 'recorder_language_change.html' + '?sentence=' + number;
+            console.log(redirectUrl);
             // show the loading 
             $('#postForm').prepend($('<span></span>').addClass('glyphicon glyphicon-refresh glyphicon-refresh-animate'));
 
             sessionStorage.setItem("formDataObj", $form.serialize());
             $(location).attr('href', redirectUrl);
+            console.log('here lang')
 
         });
 });

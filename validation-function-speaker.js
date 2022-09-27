@@ -185,7 +185,7 @@ $(document).ready(function() {
     .on('success.form.bv', function(e) {
         // Prevent form submission
         e.preventDefault();
-
+        console.log(e);
         // Get the form instance
         var $form = $(e.target);
 
@@ -195,20 +195,13 @@ $(document).ready(function() {
         // Use Ajax to submit form data
         var url = 'https://script.google.com/macros/s/AKfycbzLVWsNabqHwiXahE8GSBZK1dKzZv28Go2NW5ZgeprcZ5XE71ozGw4CZtLfQyIt4sd-jA/exec';
         var number = document.getElementById('sentence').value
+        
         var redirectUrl = 'recorder_speaker_change.html' + '?sentence='+ number;
+        console.log(redirectUrl);
         // show the loading 
         $('#postForm1').prepend($('<span></span>').addClass('glyphicon glyphicon-refresh glyphicon-refresh-animate'));
         var jqxhr = $.post(url, $form.serialize(), function(data) {
-            console.log("Success! Data: " + data.statusText);
             $(location).attr('href',redirectUrl);
-        })
-            .fail(function(data) {
-                console.warn("Error! Data: " + data.statusText);
-                // HACK - check if browser is Safari - and redirect even if fail b/c we know the form submits.
-                if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) {
-                    //alert("Browser is Safari -- we get an error, but the form still submits -- continue.");
-                    $(location).attr('href',redirectUrl);                
-                }
-            });
+        });
     });
 });
