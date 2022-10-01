@@ -26,7 +26,7 @@ $(document).ready(function () {
                     },
                 }
             },
-            lastName: {
+            age: {
                 message: 'Age is not valid',
                 validators: {
                     notEmpty: {
@@ -187,7 +187,6 @@ $(document).ready(function () {
             // Prevent form submission
             e.preventDefault();
 
-            console.log(e);
             // Get the form instance
             var $form = $(e.target);
 
@@ -195,16 +194,22 @@ $(document).ready(function () {
             var bv = $form.data('bootstrapValidator');
             // reading sentence number
             
+            var redirectUrl = '';
+            var selectedChangeType = document.getElementById('changeType').value;
+
+            if(selectedChangeType === "1"){
+                redirectUrl = 'recorder_language_change.html';
+            }else{
+                redirectUrl = 'recorder_speaker_change.html';
+            }
+
             var number = document.getElementById('sentence').value
-            var redirectUrl = 'recorder_language_change.html' + '?sentence=' + number;
-            console.log(redirectUrl);
+            redirectUrl = redirectUrl + '?sentence=' + number;
             // show the loading 
             $('#postForm').prepend($('<span></span>').addClass('glyphicon glyphicon-refresh glyphicon-refresh-animate'));
 
             sessionStorage.setItem("formDataObj", $form.serialize());
             $(location).attr('href', redirectUrl);
-            console.log('here lang')
-
         });
 });
 
