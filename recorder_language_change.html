@@ -120,7 +120,6 @@
     var startTime;
     // Play song
     function playSong() {
-      console.log('inside playSong');
       updateTimestamp();
       startPlayingSong();
       startTime = Date.now();
@@ -172,8 +171,6 @@
     function uploadData(yesNo, time) {
       var dataObj = sessionStorage.getItem("formDataObj");
       newObj = dataObj + "&time=" + time.toString() + "&noOfRepeats=" + noOfRepeats.toString() + "&yesNo=" + yesNo;
-
-      console.log(newObj);
 
       //update data in excel
       var url = 'https://script.google.com/macros/s/AKfycbxdbjLtkrE7SlC1OKBvOLoj7KpfFhKpZMb7xI-vxf64ZNIYsEViZl6kTJJMkab0wgyM/exec';

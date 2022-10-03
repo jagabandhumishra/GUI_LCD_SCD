@@ -193,13 +193,13 @@ $(document).ready(function () {
             // Get the BootstrapValidator instance
             var bv = $form.data('bootstrapValidator');
             // reading sentence number
-            
+
             var redirectUrl = '';
             var selectedChangeType = document.getElementById('changeType').value;
 
-            if(selectedChangeType === "1"){
+            if (selectedChangeType === "1") {
                 redirectUrl = 'recorder_language_change.html';
-            }else{
+            } else {
                 redirectUrl = 'recorder_speaker_change.html';
             }
 
@@ -208,8 +208,33 @@ $(document).ready(function () {
             // show the loading 
             $('#postForm').prepend($('<span></span>').addClass('glyphicon glyphicon-refresh glyphicon-refresh-animate'));
 
-            sessionStorage.setItem("formDataObj", $form.serialize());
-            $(location).attr('href', redirectUrl);
+            var registrationExcelUrl = 'https://script.google.com/macros/s/AKfycby8zM2nZWe-ElV2ebOsWPcltMZEIVifY7bz6mElL6uwOKmllAWxv2L_eiC3BO1vHdbauQ/exec ';
+
+            var registrationObj = $form.serialize();
+
+            var formObjArray = $form.serializeArray();
+
+            var formObjDict = {};
+            formObjArray.forEach((value, key) => formObjDict[value['name']] = value['value']);
+            var firstName = formObjDict['firstName'].toString().toUpperCase();
+            var age = formObjDict['age'].toString();
+
+            var regId = firstName.substring(0, 2) + age;
+
+
+            registrationObj = registrationObj + "&rid=" + regId;
+            
+            var jqxhr = $.post(registrationExcelUrl, registrationObj, function (data) {
+                alert("Data uploaded.");
+            })
+                .fail(function (data) {
+                    console.warn("Error! Data: " + data.statusText);
+                    if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) {
+                    }
+                });
+
+            sessionStorage.setItem("rid", regId);
+            // $(location).attr('href', redirectUrl);
         });
 });
 

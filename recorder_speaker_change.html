@@ -159,8 +159,6 @@
       var dataObj = sessionStorage.getItem("formDataObj");
       newObj = dataObj + "&time=" + time.toString() + "&noOfRepeats=" + noOfRepeats.toString() + "&yesNo=" + yesNo;
 
-      console.log(newObj);
-
       //update data in excel
       var url = 'https://script.google.com/macros/s/AKfycbzLVWsNabqHwiXahE8GSBZK1dKzZv28Go2NW5ZgeprcZ5XE71ozGw4CZtLfQyIt4sd-jA/exec';
       var jqxhr = $.post(url, newObj, function (data) {
