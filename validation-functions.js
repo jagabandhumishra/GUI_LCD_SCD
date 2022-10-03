@@ -234,7 +234,7 @@ $(document).ready(function () {
                 });
 
             sessionStorage.setItem("rid", regId);
-            // $(location).attr('href', redirectUrl);
+            $(location).attr('href', redirectUrl);
         });
 });
 

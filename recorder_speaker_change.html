@@ -156,11 +156,12 @@
 
     // upload data
     function uploadData(yesNo, time) {
-      var dataObj = sessionStorage.getItem("formDataObj");
-      newObj = dataObj + "&time=" + time.toString() + "&noOfRepeats=" + noOfRepeats.toString() + "&yesNo=" + yesNo;
+      var regId = sessionStorage.getItem("rid");
+      var newObj = "rid=" + regId.toString() + "&time=" + time.toString() + "&noOfRepeats=" + noOfRepeats.toString() + "&yesNo=" + yesNo + "&uttId="+ (songIndex++).toString();
+      console.log(newObj)
 
       //update data in excel
-      var url = 'https://script.google.com/macros/s/AKfycbzLVWsNabqHwiXahE8GSBZK1dKzZv28Go2NW5ZgeprcZ5XE71ozGw4CZtLfQyIt4sd-jA/exec';
+      var url = 'https://script.google.com/macros/s/AKfycbyVIblEMZFMDlPyrXRqa37d7NgLPmcNlKHa7YfGEQkP-EGrV4i2M3HPzCYjHDJ4rojM/exec';
       var jqxhr = $.post(url, newObj, function (data) {
         alert("Data uploaded.");
       })
