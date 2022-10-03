@@ -47,7 +47,7 @@
       <button id="next" class="action-btn" name="number">
         <i class="fa fa-forward">Next audio</i>
       </button>
-      
+
       <br />
       <div class="text-align: center;">
         <h4>Do you detect any change?</h4>
@@ -76,6 +76,7 @@
     const playBtn = document.getElementById("play");
     // const prevBtn = document.getElementById('prev');
     const nextBtn = document.getElementById("next");
+    nextBtn.disabled = true;
     const sentence = document.getElementById("number");
     // const random = document.getElementById('random');
     const repeat = document.getElementById("repeat");
@@ -142,18 +143,6 @@
       audio.pause();
     }
 
-    // Previous song
-    function prevSong() {
-      songIndex--;
-
-      if (songIndex < 0) {
-        songIndex = song.length - 1;
-      }
-
-      loadSong(songs[songIndex]);
-
-      playSong();
-    }
     // Calculate time
     function stopButton(yesNo) {
       playBtn.disabled = false;
@@ -170,13 +159,13 @@
     // upload data
     function uploadData(yesNo, time) {
       var regId = sessionStorage.getItem("rid");
-      var newObj = "rid=" + regId.toString() + "&time=" + time.toString() + "&noOfRepeats=" + noOfRepeats.toString() + "&yesNo=" + yesNo + "&uttId="+ (songIndex++).toString();
-      console.log(newObj)
+      var newObj = "rid=" + regId.toString() + "&time=" + time.toString() + "&noOfRepeats=" + noOfRepeats.toString() + "&yesNo=" + yesNo + "&uttId=" + (songs[songIndex - 1]).toString();
 
       //update data in excel
       var url = 'https://script.google.com/macros/s/AKfycby5XtkfIFe60xZq9JH48lSWpwe7ol31XuwiiDGSz5AVuiAfnhVXJMwqqm1ZH13Pfr-H/exec';
       var jqxhr = $.post(url, newObj, function (data) {
         alert("Data uploaded.");
+        nextBtn.disabled = false;
       })
         .fail(function (data) {
           console.warn("Error! Data: " + data.statusText);
@@ -190,6 +179,7 @@
 
     // Next song
     function nextSong() {
+      nextBtn.disabled = true;
       repeat.disabled = false;
       playBtn.disabled = true;
       songIndex++;
@@ -198,7 +188,7 @@
         songIndex = 0;
       }
 
-      loadSong(songs[songIndex]);
+      loadSong(songs[songIndex - 1]);
 
       playSong();
     }
@@ -274,37 +264,6 @@
       }
     }
 
-    // Set song on repeat
-    function setRandomOrder() {
-      if (random.classList.contains("active")) {
-        random.classList.remove("active");
-        songs = [...initialSongs];
-        songIndex = songs.indexOf(title.innerText);
-      } else {
-        random.classList.add("active");
-        songs = shuffle(songs);
-        songIndex = songs.indexOf(title.innerText);
-      }
-    }
-
-    // Shuffle songs
-    function shuffle(songs) {
-      for (let i = songs.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [songs[i], songs[j]] = [songs[j], songs[i]];
-      }
-      return songs;
-    }
-
-    // Set song on click
-    function setSong(i) {
-      songIndex = i;
-      console.log("setSong -> songIndex", songIndex);
-
-      loadSong(songs[songIndex - 1]);
-
-      playSong();
-    }
 
     // Event listeners
     playBtn.addEventListener("click", () => {
@@ -319,9 +278,12 @@
       playBtn.disabled = true;
     });
 
+    
     // Change song
 
-    nextBtn.addEventListener("click", nextSong);
+    nextBtn.addEventListener("click", function(){
+      nextSong();
+    });
 
     // Time/song update
     audio.addEventListener("timeupdate", updateProgress);
@@ -335,15 +297,14 @@
     // Repeat song
     repeat.addEventListener("click", repeatSong);
 
-    // Random songs order
-    // random.addEventListener('click', setRandomOrder);
-
     yes.addEventListener("click", function () {
       stopButton("yes");
     });
     no.addEventListener("click", function () {
       stopButton("no");
     });
+
+
 
   </script>
 </body>

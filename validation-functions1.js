@@ -66,14 +66,14 @@ $(document).ready(function () {
                     notEmpty: {
                         message: 'This field is required and cannot be empty'
                     },
-                    stringLength: {
-                        min: 1,
-                        max: 1,
-                        message: 'Enter number between 0-9'
-                    },
+                    // stringLength: {
+                    //     min: 1,
+                    //     max: 1,
+                    //     message: 'Enter number between 0-9'
+                    // },
                     regexp: {
-                        regexp: /^[0-9]/,
-                        message: 'Only numbers are allowed'
+                        regexp: /^[0-3]/,
+                        message: 'Enter number between 0-3'
                     },
                 }
             },
@@ -83,14 +83,14 @@ $(document).ready(function () {
                     notEmpty: {
                         message: 'This field is required and cannot be empty'
                     },
-                    stringLength: {
-                        min: 1,
-                        max: 1,
-                        message: 'Enter number between 0-9'
-                    },
+                    // stringLength: {
+                    //     min: 1,
+                    //     max: 1,
+                    //     message: 'Enter number between 0-9'
+                    // },
                     regexp: {
-                        regexp: /^[0-9]/,
-                        message: 'Only numbers are allowed'
+                        regexp: /^[0-3]/,
+                        message: 'Enter number between 0-3'
                     },
                 }
             },
@@ -100,14 +100,14 @@ $(document).ready(function () {
                     notEmpty: {
                         message: 'This field is required and cannot be empty'
                     },
-                    stringLength: {
-                        min: 1,
-                        max: 1,
-                        message: 'Enter number between 0-9'
-                    },
+                    // stringLength: {
+                    //     min: 1,
+                    //     max: 1,
+                    //     message: 'Enter number between 0-9'
+                    // },
                     regexp: {
-                        regexp: /^[0-9]/,
-                        message: 'Only numbers are allowed'
+                        regexp: /^[0-3]/,
+                        message: 'Enter number between 0-3'
                     },
                 }
             },
@@ -117,14 +117,14 @@ $(document).ready(function () {
                     notEmpty: {
                         message: 'This field is required and cannot be empty'
                     },
-                    stringLength: {
-                        min: 1,
-                        max: 1,
-                        message: 'Enter number between 0-9'
-                    },
+                    // stringLength: {
+                    //     min: 1,
+                    //     max: 1,
+                    //     message: 'Enter number between 0-9'
+                    // },
                     regexp: {
-                        regexp: /^[0-9]/,
-                        message: 'Only numbers are allowed'
+                        regexp: /^[0-3]/,
+                        message: 'Enter number between 0-3'
                     },
                 }
             },
@@ -134,14 +134,14 @@ $(document).ready(function () {
                     notEmpty: {
                         message: 'This field is required and cannot be empty'
                     },
-                    stringLength: {
-                        min: 1,
-                        max: 1,
-                        message: 'Enter number between 0-9'
-                    },
+                    // stringLength: {
+                    //     min: 1,
+                    //     max: 1,
+                    //     message: 'Enter number between 0-9'
+                    // },
                     regexp: {
-                        regexp: /^[0-9]/,
-                        message: 'Only numbers are allowed'
+                        regexp: /^[0-3]/,
+                        message: 'Enter number between 0-3'
                     },
                 }
             },
@@ -151,14 +151,14 @@ $(document).ready(function () {
                     notEmpty: {
                         message: 'This field is required and cannot be empty'
                     },
-                    stringLength: {
-                        min: 1,
-                        max: 1,
-                        message: 'Enter number between 0-9'
-                    },
+                    // stringLength: {
+                    //     min: 1,
+                    //     max: 1,
+                    //     message: 'Enter number between 0-9'
+                    // },
                     regexp: {
-                        regexp: /^[0-9]/,
-                        message: 'Only numbers are allowed'
+                        regexp: /^[0-3]/,
+                        message: 'Enter number between 0-3'
                     },
                 }
             },
@@ -192,7 +192,6 @@ $(document).ready(function () {
 
             // Get the BootstrapValidator instance
             var bv = $form.data('bootstrapValidator');
-            // reading sentence number
 
             var redirectUrl = '';
             var selectedChangeType = document.getElementById('changeType').value;
@@ -203,8 +202,7 @@ $(document).ready(function () {
                 redirectUrl = 'recorder_speaker_change.html';
             }
 
-            var number = document.getElementById('sentence').value
-            redirectUrl = redirectUrl + '?sentence=' + number;
+            redirectUrl = redirectUrl + '?sentence=1';
             // show the loading 
             $('#postForm').prepend($('<span></span>').addClass('glyphicon glyphicon-refresh glyphicon-refresh-animate'));
 
