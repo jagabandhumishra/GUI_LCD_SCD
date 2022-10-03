@@ -206,7 +206,7 @@ $(document).ready(function () {
             // show the loading 
             $('#postForm').prepend($('<span></span>').addClass('glyphicon glyphicon-refresh glyphicon-refresh-animate'));
 
-            var registrationExcelUrl = 'https://script.google.com/macros/s/AKfycby8zM2nZWe-ElV2ebOsWPcltMZEIVifY7bz6mElL6uwOKmllAWxv2L_eiC3BO1vHdbauQ/exec';
+            var registrationExcelUrl = 'https://script.google.com/macros/s/AKfycbw2pzCcNzJD7AioA3MHwBUgMcaSmzslK4GqjV3a8gSN5nekkTePmpOZeG6jcDFu20fGqQ/exec';
 
             var registrationObj = $form.serialize();
 
@@ -221,9 +221,10 @@ $(document).ready(function () {
 
 
             registrationObj = registrationObj + "&rid=" + regId;
-            
+
             var jqxhr = $.post(registrationExcelUrl, registrationObj, function (data) {
-                alert("Data uploaded.");
+                sessionStorage.setItem("rid", regId);
+                $(location).attr('href', redirectUrl);
             })
                 .fail(function (data) {
                     console.warn("Error! Data: " + data.statusText);
@@ -231,8 +232,7 @@ $(document).ready(function () {
                     }
                 });
 
-            sessionStorage.setItem("rid", regId);
-            $(location).attr('href', redirectUrl);
+
         });
 });
 
