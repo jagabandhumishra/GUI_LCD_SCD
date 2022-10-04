@@ -221,8 +221,8 @@
 
     // Next song
     function nextSong() {
-      repeat.disabled = false;
-      playBtn.disabled = true;
+      repeat.disabled = true;
+      playBtn.disabled = false;
       songIndex++;
 
       if (songIndex > songs.length) {
@@ -237,7 +237,7 @@
       } else {
         loadSong(songs[songIndex - 1]);
 
-        playSong();
+        // playSong();
       }
     }
 
